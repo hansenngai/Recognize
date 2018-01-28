@@ -13,6 +13,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
+import android.content.Intent;
+import java.util.Locale;
+import android.widget.Toast;
 
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
@@ -87,31 +96,31 @@ public class MainActivity extends AppCompatActivity {
                     switch(readText) 
                     {
                         case Biohazardous:
-	                        speech Text = "Biohazardous infection materials.";
+	                    speechText = "Biohazardous infection materials.";
                             break;
                         case Corrosion:
-	                        speech Text = "Serious eye damage, skin corrosion, or corrosive to metals.";
+	                    speechText = "Serious eye damage, skin corrosion, or corrosive to metals.";
                             break;
                         case Exclamation mark:
-	                        speech Text = "Irritation (skin or eyes), skin sensitization, (harmful) acute toxicity specific target organ toxicity (drowsiness or dizziness, or respirator irritation), or hazardous to the ozone layer.";
+	                    speechText = "Irritation (skin or eyes), skin sensitization, (harmful) acute toxicity specific target organ toxicity (drowsiness or dizziness, or respirator irritation), or hazardous to the ozone layer.";
                             break;
                         case Exploding bomb:
-	                        speech Text = "Explosive, (extremely) self-reactive, or (extremely) organic peroxide.";
+	                    speechText = "Explosive, (extremely) self-reactive, or (extremely) organic peroxide.";
                             break;
                         case Flame:
-	                        speech Text = "Flammable, self-reactive, pyrophoric, self-heating, in contact with water this material will emit flammable gases, or organic peroxide.";
+	                    speechText = "Flammable, self-reactive, pyrophoric, self-heating, in contact with water this material will emit flammable gases, or organic peroxide.";
                             break;
                         case Flame over circle:
-	                        speech Text ="Oxidizer.";
+	                    speechText ="Oxidizer.";
                             break;
                         case Gas Cylinder 
-                            speech Text = "Gas under pressure.";
+                            speechText = "Gas under pressure.";
                             break;
                         case Health hazard:
-	                        speech Text = "Carcinogenicity, respiratory sensitization, specific target organ toxicity, germ cell mutagenicity, or aspiration hazard.";
+	                    speechText = "Carcinogenicity, respiratory sensitization, specific target organ toxicity, germ cell mutagenicity, or aspiration hazard.";
                             break;                      
                         case Skull and crossbones:
-                            speech Text = "(Fatal or toxic) acute toxicity.";
+                            speechText = "(Fatal or toxic) acute toxicity.";
                             break;
                         default:
                             speechText = "Symbol is not identifed, please take another picture";
@@ -119,6 +128,77 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+				       
+public class SpeakingAndroid extends Activity implements OnClickListener, OnInitListener {
+     
+        //TTS object
+    private TextToSpeech myTTS;
+        //status check code
+    private int MY_DATA_CHECK_CODE = 0;
+     
+        //create the Activity
+    public void onCreate(Bundle savedInstanceState) {
+     
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+             
+                //get a reference to the button element listed in the XML layout
+            Button speakButton = (Button)findViewById(R.id.speak);
+                //listen for clicks
+            speakButton.setOnClickListener(this);
+ 
+            //check for TTS data
+            Intent checkTTSIntent = new Intent();
+            checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+            startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
+    }
+     
+        //respond to button clicks
+    public void onClick(View v) {
+ 
+            //get the text entered
+            EditText enteredText = (EditText)findViewById(R.id.enter);
+            String words = enteredText.getText().toString();
+            speakWords(words);
+    }
+     
+        //speak the user text
+    private void speakWords(String speech) {
+ 
+            //speak straight away
+            myTTS.speak(speech, TextToSpeech.QUEUE_FLUSH, null);
+    }
+     
+        //act on result of TTS data check
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+     
+        if (requestCode == MY_DATA_CHECK_CODE) {
+            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+                //the user has the necessary data - create the TTS
+            myTTS = new TextToSpeech(this, this);
+            }
+            else {
+                    //no data - install it now
+                Intent installTTSIntent = new Intent();
+                installTTSIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+                startActivity(installTTSIntent);
+            }
+        }
+    }
+ 
+        //setup TTS
+    public void onInit(int initStatus) {
+     
+            //check for successful instantiation
+        if (initStatus == TextToSpeech.SUCCESS) {
+            if(myTTS.isLanguageAvailable(Locale.US)==TextToSpeech.LANG_AVAILABLE)
+                myTTS.setLanguage(Locale.US);
+        }
+        else if (initStatus == TextToSpeech.ERROR) {
+            Toast.makeText(this, "Sorry! Text To Speech failed...", Toast.LENGTH_LONG).show();
+        }
+    }
+}
 
     private void chooseImage() {
         Intent intent = new Intent();
