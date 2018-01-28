@@ -42,12 +42,21 @@
         android:id="@+id/btnChoose"
         android:background="#90CAF9"/>
 
+    <Button
+        android:layout_below="@+id/button_process"
+        android:layout_gravity="center_horizontal"
+        android:text="speak"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/speakButton"
+        android:background="#90CAF9"/>
+
     <TextView
         android:id="@+id/textview_result"
         android:text="NO TEXT"
         android:gravity="center_horizontal"
         android:textSize="24sp"
-        android:layout_below="@+id/button_process"
+        android:layout_below="@+id/speakButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
