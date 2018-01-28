@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     TextView txtResult;
     Bitmap bm;
     String readText;
+    String speechText;
 
     Uri filePath;
     Button btnChoose;
@@ -82,6 +83,38 @@ public class MainActivity extends AppCompatActivity {
                     String rT = stringBuilder.toString();
                     txtResult.setText(rT);
                     readText = rT;
+                    
+                    switch(readText) 
+                    {
+                        case Biohazardous:
+	                        speech Text = "Biohazardous infection materials.";
+                            break;
+                        case Corrosion:
+	                        speech Text = "Serious eye damage, skin corrosion, or corrosive to metals.";
+                            break;
+                        case Exclamation mark:
+	                        speech Text = "Irritation (skin or eyes), skin sensitization, (harmful) acute toxicity specific target organ toxicity (drowsiness or dizziness, or respirator irritation), or hazardous to the ozone layer.";
+                            break;
+                        case Exploding bomb:
+	                        speech Text = "Explosive, (extremely) self-reactive, or (extremely) organic peroxide.";
+                            break;
+                        case Flame:
+	                        speech Text = "Flammable, self-reactive, pyrophoric, self-heating, in contact with water this material will emit flammable gases, or organic peroxide.";
+                            break;
+                        case Flame over circle:
+	                        speech Text ="Oxidizer.";
+                            break;
+                        case Gas Cylinder 
+                            speech Text = "Gas under pressure.";
+                            break;
+                        case Health hazard:
+	                        speech Text = "Carcinogenicity, respiratory sensitization, specific target organ toxicity, germ cell mutagenicity, or aspiration hazard.";
+                            break;                      
+                        case Skull and crossbones:
+                            speech Text = "(Fatal or toxic) acute toxicity.";
+                            break;
+                        default:
+                            speechText = "Symbol is not identifed, please take another picture";
                 }
             }
         });
