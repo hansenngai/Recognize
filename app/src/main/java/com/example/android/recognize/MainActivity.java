@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Bitmap bitmap = BitmapFactory.decodeResource(
                 getApplicationContext().getResources(),
-                R.drawable.text_recognition
+                R.drawable.text_recognition2
         );
 
         imageView.setImageBitmap(bitmap);
